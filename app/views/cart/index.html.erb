@@ -1,0 +1,97 @@
+<% total = 0 %>
+
+<div class="ui grid stackable">
+    
+    <% if @cart.empty? %>
+        <div class="row">
+            <div>
+                <div class="ui message info">
+                    Oh it looks like your cart is empty
+                </div>
+            </div>
+        </div>
+    <%end%>
+    
+    <div class="row">
+        <h3 class="ui header">
+            Cart
+        </h3>
+    </div>
+    
+    <div class="row">
+    <table class="ui celled padded table">
+      <thead>
+        <tr><th class="single line">Name</th>
+        <th>Description</th>
+        <th>Price</th>
+        <th>Picture</th>
+        <th>Quantity</th>
+        <th></th>
+      </tr></thead>
+      <tbody>
+          
+        <% @cart.each do |id,quantity| %>
+        
+            <% item = Item.find_by_id(id) %>
+            
+            <tr>
+              <td>
+                <h2 class="ui center aligned header"><%= item.name %></h2>
+              </td>
+              <td class="single line">
+                  <%= item.description %>
+              </td>
+              <td>
+                <%= number_to_currency(quantity * item.price, :unit => "€") %>
+              </td>
+              <td class="right aligned">
+                <a href="/items/<%= item.id %>">
+                  <%= image_tag item.image_url, :class => "ui tiny image" %>
+                </a>
+              </td>
+              <td>
+                  <%= quantity %>
+              </td>
+              <td>
+                  <div>
+                      <a href="/cart/remove/<%= item.id %>" class="ui button red">Remove</a>
+                  </div>
+              </td
+            </tr>
+            
+            <!-- add the price to the total -->
+            <% total += quantity * item.price%>
+            
+        <% end %>
+        
+      </tbody>
+    </table>
+  </div>
+  
+  <div class="row">
+      <div>
+          <div class="ui message info">
+              Total: <%= number_to_currency(total, :unit => "Eur")%>
+          </div>
+      </div>
+  </div>
+  
+  <div class="row">
+      <div>
+          <div class="ui button red">
+              <%= link_to 'Clear Cart', :controller => "cart", :action => "clear" %>
+          </div>
+      </div>
+      <div>
+          <div class="ui button green">
+          <%= link_to 'Checkout', controller => "cart", :action => "orderCreate" %> 
+      </div>
+      </div>
+      <div>
+          <div class ="ui button blue">
+              <%= link_to "Continue Shopping", :controller => :items %>
+          </div>
+      </div>
+  </div>
+    
+</div>

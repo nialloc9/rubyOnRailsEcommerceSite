@@ -1,0 +1,38 @@
+<div class="ui grid stackable">
+    
+    <% if @categories.length > 0 %>
+        <div class="row">
+            <h3 class="ui header">
+                Categories
+            </h3>
+        </div>
+    <% end %>
+    
+    
+    <% if user_signed_in? && current_user.id == 3 %>
+        <div>
+            <%= link_to "Create category", new_category_path, :class => "ui button blue" %>
+        </div>
+    <% end %>
+    
+    <div class="row">
+        <% @categories.each do |category| %>
+        
+                <div class="card">
+                    <a href="/category/<%= category.name %>" class="ui image small">
+                      <%= image_tag category.image_url %>
+                    </a>
+                    <div class="extra">
+                        <div>
+                            <%= category.name %>
+                        </div>
+                        <div>
+                            <%= category.description %>
+                        </div>
+                    </div>
+                </div>
+                
+            <% end %>   
+    </div>
+    
+</div>
